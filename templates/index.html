@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AdmitAI | Graduate Admission Predictor</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(24, 180, 170, 0.15), transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(40, 100, 220, 0.12), transparent 30%),
+                #f5f8fb;
+
+            color: #102a43;
+            padding: 35px 20px;
+        }
+
+        /* Main wrapper */
+
+        .app {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+
+        /* Header */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #063f46;
+
+            color: white;
+            font-size: 22px;
+
+            box-shadow: 0 8px 20px rgba(6, 63, 70, 0.2);
+        }
+
+        .brand-text h2 {
+            font-size: 18px;
+            color: #063f46;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #78909c;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            background: white;
+            padding: 9px 15px;
+
+            border-radius: 30px;
+
+            font-size: 12px;
+            color: #58717c;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #18b7a6;
+        }
+
+
+        /* Hero */
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+
+            gap: 30px;
+
+            margin-bottom: 30px;
+        }
+
+        .hero-left {
+            padding: 20px 10px;
+        }
+
+        .tag {
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            border-radius: 30px;
+
+            background: #e5f7f5;
+            color: #087f78;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            line-height: 1.12;
+
+            letter-spacing: -1.5px;
+
+            color: #102a43;
+
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #07877e;
+        }
+
+        .hero p {
+            color: #627d8a;
+
+            max-width: 550px;
+
+            line-height: 1.7;
+
+            font-size: 15px;
+        }
+
+
+        /* AI visual card */
+
+        .visual-card {
+            position: relative;
+
+            min-height: 230px;
+
+            border-radius: 25px;
+
+            overflow: hidden;
+
+            background: linear-gradient(
+                135deg,
+                #063f46,
+                #087f7a
+            );
+
+            padding: 30px;
+
+            color: white;
+
+            box-shadow: 0 20px 45px rgba(6,63,70,0.2);
+        }
+
+        .visual-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border: 1px solid rgba(255,255,255,0.2);
+
+            border-radius: 50%;
+
+            right: -50px;
+            top: -60px;
+        }
+
+        .visual-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            border: 1px solid rgba(255,255,255,0.1);
+
+            border-radius: 50%;
+
+            right: -100px;
+            top: -100px;
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .visual-card small {
+            opacity: 0.7;
+            font-size: 12px;
+        }
+
+        .visual-card h2 {
+            font-size: 30px;
+            margin-top: 15px;
+        }
+
+        .visual-card p {
+            font-size: 13px;
+            opacity: 0.75;
+            margin-top: 7px;
+        }
+
+        .mini-bars {
+            display: flex;
+            align-items: end;
+
+            gap: 8px;
+
+            height: 65px;
+
+            margin-top: 25px;
+        }
+
+        .bar {
+            width: 13px;
+
+            background: rgba(255,255,255,0.35);
+
+            border-radius: 5px 5px 0 0;
+        }
+
+        .bar:nth-child(1) {
+            height: 25%;
+        }
+
+        .bar:nth-child(2) {
+            height: 40%;
+        }
+
+        .bar:nth-child(3) {
+            height: 55%;
+        }
+
+        .bar:nth-child(4) {
+            height: 48%;
+        }
+
+        .bar:nth-child(5) {
+            height: 70%;
+        }
+
+        .bar:nth-child(6) {
+            height: 85%;
+        }
+
+
+        /* Form Card */
+
+        .form-card {
+            background: rgba(255,255,255,0.95);
+
+            border: 1px solid #e4edf2;
+
+            border-radius: 25px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 20px 50px rgba(20,50,70,0.07);
+        }
+
+        .form-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .form-heading h2 {
+            font-size: 21px;
+            color: #163b4d;
+        }
+
+        .form-heading p {
+            font-size: 12px;
+            color: #8ba0aa;
+        }
+
+
+        /* Inputs */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .field {
+            position: relative;
+        }
+
+        .field.full {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #49616c;
+
+            margin-bottom: 8px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding: 0 15px;
+
+            border-radius: 12px;
+
+            border: 1px solid #dce7ec;
+
+            background: #f9fbfc;
+
+            color: #173b4b;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: all 0.25s ease;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #9ccbc7;
+        }
+
+        input:focus,
+        select:focus {
+            background: white;
+
+            border-color: #07877e;
+
+            box-shadow:
+                0 0 0 4px rgba(7,135,126,0.08);
+        }
+
+        .hint {
+            display: block;
+
+            margin-top: 6px;
+
+            font-size: 10px;
+
+            color: #9aabb2;
+        }
+
+
+        /* Button */
+
+        .button-area {
+            margin-top: 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        .predict-btn {
+
+            flex: 1;
+
+            height: 55px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #063f46,
+                    #07877e
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            box-shadow:
+                0 12px 25px rgba(6,63,70,0.18);
+        }
+
+        .predict-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 17px 30px rgba(6,63,70,0.25);
+        }
+
+        .secure-text {
+
+            font-size: 11px;
+
+            color: #8ca0a8;
+
+            max-width: 180px;
+
+            line-height: 1.5;
+        }
+
+
+        /* Info cards */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(3,1fr);
+
+            gap: 15px;
+
+            margin-top: 20px;
+        }
+
+        .info {
+
+            background: white;
+
+            border: 1px solid #e7eef2;
+
+            border-radius: 15px;
+
+            padding: 17px;
+
+        }
+
+        .info strong {
+
+            display: block;
+
+            color: #163b4d;
+
+            font-size: 13px;
+
+            margin-bottom: 5px;
+        }
+
+        .info span {
+
+            font-size: 11px;
+
+            color: #8397a0;
+
+            line-height: 1.5;
+        }
+
+
+        /* Footer */
+
+        footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            font-size: 11px;
+
+            color: #91a1a8;
+        }
+
+
+        /* Responsive */
+
+        @media(max-width: 800px) {
+
+            .hero {
+
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+
+                font-size: 36px;
+            }
+
+        }
+
+
+        @media(max-width: 600px) {
+
+            body {
+
+                padding: 20px 12px;
+            }
+
+            .topbar {
+
+                margin-bottom: 20px;
+            }
+
+            .status {
+
+                display: none;
+            }
+
+            .hero-left {
+
+                padding: 5px;
+            }
+
+            .hero h1 {
+
+                font-size: 32px;
+            }
+
+            .visual-card {
+
+                min-height: 200px;
+            }
+
+            .form-card {
+
+                padding: 22px 17px;
+
+                border-radius: 20px;
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 18px;
+            }
+
+            .field.full {
+
+                grid-column: span 1;
+            }
+
+            .form-heading {
+
+                display: block;
+            }
+
+            .form-heading p {
+
+                margin-top: 5px;
+            }
+
+            .button-area {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .secure-text {
+
+                max-width: none;
+
+                text-align: center;
+            }
+
+            .info-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                AI
+            </div>
+
+            <div class="brand-text">
+
+                <h2>AdmitAI</h2>
+
+                <span>Graduate Admission Intelligence</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            Prediction Model Online
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-left">
+
+            <div class="tag">
+                DEEP LEARNING POWERED
+            </div>
+
+            <h1>
+                Discover your
+                <span>admission potential.</span>
+            </h1>
+
+            <p>
+                Enter your academic profile and let our deep learning
+                model estimate your graduate admission probability
+                based on historical admission data.
+            </p>
+
+        </div>
+
+
+        <div class="visual-card">
+
+            <div class="visual-content">
+
+                <small>
+                    MODEL ANALYSIS
+                </small>
+
+                <h2>
+                    7 Academic Factors
+                </h2>
+
+                <p>
+                    Analyzing your academic profile
+                    through a trained neural network.
+                </p>
+
+
+                <div class="mini-bars">
+
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+        <div class="form-heading">
+
+            <div>
+
+                <h2>
+                    Academic Profile
+                </h2>
+
+                <p>
+                    Enter your details accurately for a better prediction.
+                </p>
+
+            </div>
+
+            <p>
+                7 fields required
+            </p>
+
+        </div>
+
+
+
+        <form method="post" action="/predict">
+
+            <div class="form-grid">
+
+
+                <!-- GRE -->
+
+                <div class="field">
+
+                    <label for="gre_score">
+                        GRE SCORE
+                    </label>
+
+                    <div class="input-box">
+
+                        <input
+                            type="number"
+                            id="gre_score"
+                            name="gre_score"
+                            placeholder="Example: 325"
+                            min="0"
+                            max="340"
+                            required
+                        >
+
+                    </div>
+
+                    <span class="hint">
+                        Maximum score: 340
+                    </span>
+
+                </div>
+
+
+
+                <!-- TOEFL -->
+
+                <div class="field">
+
+                    <label for="toefl_score">
+                        TOEFL SCORE
+                    </label>
+
+                    <div class="input-box">
+
+                        <input
+                            type="number"
+                            id="toefl_score"
+                            name="toefl_score"
+                            placeholder="Example: 110"
+                            min="0"
+                            max="120"
+                            required
+                        >
+
+                    </div>
+
+                    <span class="hint">
+                        Maximum score: 120
+                    </span>
+
+                </div>
+
+
+
+                <!-- UNIVERSITY -->
+
+                <div class="field">
+
+                    <label for="university_rating">
+                        UNIVERSITY RATING
+                    </label>
+
+                    <select
+                        id="university_rating"
+                        name="university_rating"
+                        required
+                    >
+
+                        <option value="" disabled selected>
+                            Select rating
+                        </option>
+
+                        <option value="1">
+                            1 — Rating
+                        </option>
+
+                        <option value="2">
+                            2 — Rating
+                        </option>
+
+                        <option value="3">
+                            3 — Rating
+                        </option>
+
+                        <option value="4">
+                            4 — Rating
+                        </option>
+
+                        <option value="5">
+                            5 — Rating
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SOP -->
+
+                <div class="field">
+
+                    <label for="sop">
+                        STATEMENT OF PURPOSE
+                    </label>
+
+                    <select
+                        id="sop"
+                        name="sop"
+                        required
+                    >
+
+                        <option value="" disabled selected>
+                            Select SOP rating
+                        </option>
+
+                        <option value="1">1.0</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2.0</option>
+                        <option value="2.5">2.5</option>
+                        <option value="3">3.0</option>
+                        <option value="3.5">3.5</option>
+                        <option value="4">4.0</option>
+                        <option value="4.5">4.5</option>
+                        <option value="5">5.0</option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- LOR -->
+
+                <div class="field">
+
+                    <label for="lor">
+                        LETTER OF RECOMMENDATION
+                    </label>
+
+                    <select
+                        id="lor"
+                        name="lor"
+                        required
+                    >
+
+                        <option value="" disabled selected>
+                            Select LOR rating
+                        </option>
+
+                        <option value="1">1.0</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2.0</option>
+                        <option value="2.5">2.5</option>
+                        <option value="3">3.0</option>
+                        <option value="3.5">3.5</option>
+                        <option value="4">4.0</option>
+                        <option value="4.5">4.5</option>
+                        <option value="5">5.0</option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- CGPA -->
+
+                <div class="field">
+
+                    <label for="cgpa">
+                        CGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cgpa"
+                        name="cgpa"
+                        placeholder="Example: 9.00"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        required
+                    >
+
+                    <span class="hint">
+                        CGPA range: 0 – 10
+                    </span>
+
+                </div>
+
+
+
+                <!-- RESEARCH -->
+
+                <div class="field full">
+
+                    <label for="research">
+                        RESEARCH EXPERIENCE
+                    </label>
+
+                    <select
+                        id="research"
+                        name="research"
+                        required
+                    >
+
+                        <option value="" disabled selected>
+                            Select an option
+                        </option>
+
+                        <option value="1">
+                            Yes — I have research experience
+                        </option>
+
+                        <option value="0">
+                            No — I don't have research experience
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <div class="button-area">
+
+                <button
+                    type="submit"
+                    class="predict-btn"
+                >
+                    Analyze My Admission Chance →
+                </button>
+
+                <div class="secure-text">
+                    Your information is used only
+                    to generate the prediction.
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- INFO -->
+
+    <div class="info-grid">
+
+        <div class="info">
+
+            <strong>
+                Neural Network
+            </strong>
+
+            <span>
+                Prediction generated using
+                a trained deep learning model.
+            </span>
+
+        </div>
+
+
+        <div class="info">
+
+            <strong>
+                7 Input Features
+            </strong>
+
+            <span>
+                GRE, TOEFL, university rating,
+                SOP, LOR, CGPA and research.
+            </span>
+
+        </div>
+
+
+        <div class="info">
+
+            <strong>
+                Instant Prediction
+            </strong>
+
+            <span>
+                Submit your profile and receive
+                the model prediction immediately.
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <footer>
+
+        Graduate Admission Predictor · Deep Learning Project
+
+    </footer>
+
+
+</div>
+
+</body>
+
+</html>
