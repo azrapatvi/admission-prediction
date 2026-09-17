@@ -1010,6 +1010,15 @@
 
         </form>
 
+{% if prediction is defined %}
+<div class="info" style="margin-top:20px; text-align:center;">
+    <strong>Predicted Admission Chance</strong>
+    <span style="font-size:22px; color:#07877e; font-weight:700;">
+        {{ prediction }}%
+    </span>
+</div>
+{% endif %}
+
     </div>
 
 
