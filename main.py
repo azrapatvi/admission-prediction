@@ -19,8 +19,8 @@ def index(request:Request):
 
 @app.post("/predict")
 def predict(request:Request,
-        gre:int=Form(...),
-        toefl:int=Form(...),
+        gre_score:int=Form(...),     
+        toefl_score:int=Form(...),
         university_rating:int=Form(...),
         sop:float=Form(...),
         lor:float=Form(...),
