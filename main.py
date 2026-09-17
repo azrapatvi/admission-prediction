@@ -31,8 +31,8 @@ def predict(request:Request,
         ):
 
     new_df = pd.DataFrame({
-        'gre score': [gre],
-        'toefl score': [toefl],
+        'gre score': [gre_score],
+        'toefl score': [toefl_score],
         'university rating': [university_rating],
         'sop': [sop],
         'lor': [lor],
